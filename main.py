@@ -1,6 +1,6 @@
 # 📁 main.py
 from fastapi import FastAPI, Query, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from naver_ads_api import get_keyword_stats
 from naver_openapi import get_trend_data
@@ -128,6 +128,51 @@ def generate_blog_ui(request: Request, keyword: str = Query(...)):
         "snippets": blog_snippets,
         "keyword_analysis": keyword_analysis,
         "blog_result": result
+    })
+
+@app.get("/openapi.json", include_in_schema=False)
+def get_openapi_schema():
+    return JSONResponse(content={
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Keyword Blog Generator API",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {"url": "https://your-app-name.onrender.com"}
+        ],
+        "paths": {
+            "/generate-blog": {
+                "get": {
+                    "summary": "키워드 기반 블로그 작성 프롬프트 생성",
+                    "parameters": [
+                        {
+                            "name": "keyword",
+                            "in": "query",
+                            "required": True,
+                            "description": "블로그 주제로 사용할 핵심 키워드",
+                            "schema": {"type": "string"}
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "프롬프트 텍스트 반환",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "status": {"type": "string"},
+                                            "data": {"type": "string"}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     })
 
 if __name__ == "__main__":
