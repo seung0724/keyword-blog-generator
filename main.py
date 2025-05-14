@@ -133,13 +133,13 @@ def generate_blog_ui(request: Request, keyword: str = Query(...)):
 @app.get("/openapi.json", include_in_schema=False)
 def get_openapi_schema():
     return JSONResponse(content={
-        "openapi": "3.0.0",
+        "openapi": "3.1.0",
         "info": {
             "title": "Keyword Blog Generator API",
             "version": "1.0.0"
         },
         "servers": [
-            {"url": "https://your-app-name.onrender.com"}
+            {"url": "https://keyword-blog-generator.onrender.com"}
         ],
         "paths": {
             "/generate-blog": {
