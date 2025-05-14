@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>분석 결과</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 30px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #333;
+        }
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        pre {
+            white-space: pre-wrap;
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        .copy-button {
+            padding: 6px 14px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .copy-button:hover {
+            background: #0056b3;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        details {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>🔍 키워드: {{ keyword }}</h2>
+
+    <div class="card">
+        <h3>📊 키워드 데이터</h3>
+        <pre>{{ keyword_data }}</pre>
+    </div>
+
+    <div class="card">
+        <h3>📈 검색 트렌드</h3>
+        <pre>{{ trend_data }}</pre>
+    </div>
+
+    <div class="card">
+        <h3>📝 블로그 요약 (최대 3개)</h3>
+        {% for snippet in snippets.split('\n---\n') %}
+            <details>
+                <summary>블로그 요약 {{ loop.index }}</summary>
+                <pre>{{ snippet }}</pre>
+            </details>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h3>✍️ GPT 프롬프트 (복사해서 내GPT에 붙여넣기)</h3>
+        <pre id="prompt">{{ blog_result }}</pre>
+        <button class="copy-button" onclick="copyPrompt()">📋 복사하기</button>
+    </div>
+
+    <script>
+        function copyPrompt() {
+            const text = document.getElementById("prompt").innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("프롬프트가 복사되었습니다!");
+            });
+        }
+    </script>
+
+    <a href="/">← 다른 키워드로 다시 분석하기</a>
+</body>
+</html>
